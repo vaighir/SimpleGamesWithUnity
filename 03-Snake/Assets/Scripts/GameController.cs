@@ -75,6 +75,11 @@ public class GameController : MonoBehaviour
         //TODO add checking if snake is not already there
         foodX = Random.Range(0, width);
         foodY = Random.Range(0, height);
+
+        if(dataGrid[foodX, foodY] != 0)
+        {
+            SpawnFood();
+        }
     }
 
     private void UpdateDataGrid()
