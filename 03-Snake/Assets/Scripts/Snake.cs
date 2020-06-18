@@ -30,8 +30,21 @@ public class Snake
         }
     }
 
-    public void MoveSnake()
+    public SnakeBlock GetNewHead(int x, int y)
     {
+        SnakeBlock newHead = new SnakeBlock(head.x + x, head.y + y);
+        return newHead;
+    }
 
+    public void MoveSnake(int x, int y)
+    {
+        head = GetNewHead(x, y);
+        blocks.Insert(0, head);
+        blocks.RemoveAt(lenght);
+    }
+
+    public SnakeBlock GetTail()
+    {
+        return blocks[lenght - 1];
     }
 }
