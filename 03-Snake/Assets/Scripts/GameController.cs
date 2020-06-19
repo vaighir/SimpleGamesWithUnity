@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour
 {
     private int[,] dataGrid;
     private SpriteRenderer[,] displayGrid;
-    private int height, width, snakeLength, startX, startY, foodX, foodY, moveX, moveY, eatingCounter, score;
+    private int height, width, snakeLength, moveX, moveY, eatingCounter, score;
     private float offsetX, offsetY, lastMoveTime, gameSpeed;
     private Snake snake;
     private SnakeBlock start, food, newTail;
@@ -32,8 +32,6 @@ public class GameController : MonoBehaviour
 
         snakeLength = 4;
         start = new SnakeBlock((int)(width / 2), (int)((height - snakeLength) / 2));
-       // startX = (int)(width / 2);
-       //startY = (int)((height - snakeLength) / 2);
 
         gameOver = false;
         foodAvailable = false;
@@ -103,9 +101,10 @@ public class GameController : MonoBehaviour
                 lastMoveTime = Time.time;
             }
 
-            if (eating)
+            if (eating && eatingCounter == 0)
             {
-                Debug.Log(eatingCounter);
+                Debug.Log("eaten!");
+                eating = false;
             }
 
             UpdateDataGrid();
@@ -116,13 +115,15 @@ public class GameController : MonoBehaviour
 
     private void SpawnFood()
     {
-        foodX = Random.Range(0, width);
-        foodY = Random.Range(0, height);
+        int x = Random.Range(0, width);
+        int y = Random.Range(0, height);
 
-        if(dataGrid[foodX, foodY] != 0)
+        if(dataGrid[x, y] != 0)
         {
             SpawnFood();
         }
+
+        food = new SnakeBlock(x, y);
         foodAvailable = true;
     }
 
@@ -162,7 +163,7 @@ public class GameController : MonoBehaviour
         if (!CheckCollision(newHead))
         {
             snake.MoveSnake(moveX, moveY);
-            if(snake.head.x == foodX && snake.head.y == foodY)
+            if(snake.head.x == food.x && snake.head.y == food.y)
             {
                 Debug.Log("eating");
                 eating = true;
@@ -230,7 +231,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        dataGrid[foodX, foodY] = 2;
+        dataGrid[food.x, food.y] = 2;
 
         for(int i = 0; i < snakeLength; i++)
         {
