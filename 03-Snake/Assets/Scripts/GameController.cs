@@ -6,10 +6,11 @@ public class GameController : MonoBehaviour
 {
     private int[,] dataGrid;
     private SpriteRenderer[,] displayGrid;
-    private int height, width, snakeLength, startX, startY, foodX, foodY, moveX, moveY;
+    private int height, width, snakeLength, startX, startY, foodX, foodY, moveX, moveY, eatingCounter, score;
     private float offsetX, offsetY, lastMoveTime, gameSpeed;
     private Snake snake;
-    private bool gameOver, foodAvailable, changingDirection;
+    private SnakeBlock start, food, newTail;
+    private bool gameOver, foodAvailable, changingDirection, eating;
     private string direction;
 
     [SerializeField] Sprite backgroundSprite, activeSprite;
@@ -30,16 +31,20 @@ public class GameController : MonoBehaviour
         offsetY = 0.5f * height - 0.5f;
 
         snakeLength = 4;
-        startX = (int)(width / 2);
-        startY = (int)((height - snakeLength) / 2);
+        start = new SnakeBlock((int)(width / 2), (int)((height - snakeLength) / 2));
+       // startX = (int)(width / 2);
+       //startY = (int)((height - snakeLength) / 2);
 
         gameOver = false;
         foodAvailable = false;
         changingDirection = false;
+        eating = false;
 
         lastMoveTime = Time.time;
         gameSpeed = 0.5f;
         direction = "up";
+        eatingCounter = 0;
+        score = 0;
     }
 
     private void InitializeGrids()
@@ -69,7 +74,7 @@ public class GameController : MonoBehaviour
 
     private void SpawnSnake()
     {
-        snake = new Snake(snakeLength, startX, startY);
+        snake = new Snake(snakeLength, start.x, start.y);
     }
 
     // Update is called once per frame
@@ -98,6 +103,11 @@ public class GameController : MonoBehaviour
                 lastMoveTime = Time.time;
             }
 
+            if (eating)
+            {
+                Debug.Log(eatingCounter);
+            }
+
             UpdateDataGrid();
             DisplayGrid();
         }
@@ -106,7 +116,6 @@ public class GameController : MonoBehaviour
 
     private void SpawnFood()
     {
-        //TODO add checking if snake is not already there
         foodX = Random.Range(0, width);
         foodY = Random.Range(0, height);
 
@@ -153,6 +162,18 @@ public class GameController : MonoBehaviour
         if (!CheckCollision(newHead))
         {
             snake.MoveSnake(moveX, moveY);
+            if(snake.head.x == foodX && snake.head.y == foodY)
+            {
+                Debug.Log("eating");
+                eating = true;
+                eatingCounter = snakeLength;
+                score++;
+                foodAvailable = false;
+            }
+            if (eating)
+            {
+                eatingCounter--;
+            }
         }
 
         if (changingDirection)
