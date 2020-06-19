@@ -104,6 +104,8 @@ public class GameController : MonoBehaviour
             if (eating && eatingCounter == 0)
             {
                 Debug.Log("eaten!");
+                snake.Eat(newTail);
+                snakeLength++;
                 eating = false;
             }
 
@@ -162,19 +164,24 @@ public class GameController : MonoBehaviour
 
         if (!CheckCollision(newHead))
         {
-            snake.MoveSnake(moveX, moveY);
-            if(snake.head.x == food.x && snake.head.y == food.y)
-            {
-                Debug.Log("eating");
-                eating = true;
-                eatingCounter = snakeLength;
-                score++;
-                foodAvailable = false;
-            }
             if (eating)
             {
                 eatingCounter--;
             }
+            snake.MoveSnake(moveX, moveY);
+            if(snake.head.x == food.x && snake.head.y == food.y)
+            {
+                Debug.Log("eating");
+                newTail = food;
+                Debug.Log(newTail.x);
+                Debug.Log(newTail.y);
+                eating = true;
+                
+                eatingCounter = snakeLength;
+                score++;
+                foodAvailable = false;
+            }
+            
         }
 
         if (changingDirection)

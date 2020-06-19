@@ -43,6 +43,12 @@ public class Snake
         blocks.RemoveAt(lenght);
     }
 
+    public void Eat(SnakeBlock food)
+    {
+        blocks.Add(food);
+        lenght++;
+    }
+
     public SnakeBlock GetTail()
     {
         return blocks[lenght - 1];
