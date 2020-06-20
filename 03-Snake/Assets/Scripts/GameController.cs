@@ -112,6 +112,10 @@ public class GameController : MonoBehaviour
             DisplayGrid();
         }
 
+        if (Input.GetKey("space")){
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
     }
 
     private void SpawnFood()
