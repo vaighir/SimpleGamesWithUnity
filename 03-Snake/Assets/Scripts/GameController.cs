@@ -221,9 +221,22 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("you hit the wall");
             status = true;
-        } else if (dataGrid[newHead.x, newHead.y] == 1)
+        } else if (dataGrid[newHead.x, newHead.y] == 1 && !CompareSnakeBlocks(newHead, snake.GetTail()))
         {
+            
             Debug.Log("you hit yourself");
+            status = true;
+        }
+
+        return status;
+    }
+
+    private bool CompareSnakeBlocks(SnakeBlock firstBlock, SnakeBlock secondBlock)
+    {
+        bool status = false;
+
+        if(firstBlock.x == secondBlock.x && firstBlock.y == secondBlock.y)
+        {
             status = true;
         }
 
