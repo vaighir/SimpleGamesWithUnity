@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour
 {
     private int[,] dataGrid;
     private SpriteRenderer[,] displayGrid;
-    private int height, width, snakeLength, moveX, moveY, eatingCounter, score;
+    private int height, width, snakeLength, moveX, moveY, eatingCounter;
     private float offsetX, offsetY, lastMoveTime, gameSpeed;
     private Snake snake;
     private SnakeBlock start, food, newTail;
@@ -42,7 +42,6 @@ public class GameController : MonoBehaviour
         gameSpeed = 0.5f;
         direction = "up";
         eatingCounter = 0;
-        score = 0;
     }
 
     private void InitializeGrids()
@@ -178,7 +177,6 @@ public class GameController : MonoBehaviour
                 eating = true;
                 
                 eatingCounter = snakeLength;
-                score++;
                 foodAvailable = false;
             }
             
